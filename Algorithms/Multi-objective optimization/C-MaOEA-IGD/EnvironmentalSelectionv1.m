@@ -1,4 +1,4 @@
-function [Population,Rank,Dis] = EnvironmentalSelection(Population,W,N)
+function [Population,Rank,Dis] = EnvironmentalSelectionv1(Population,W,N)
 % The environmental selection of MaOEA/IGD
 
 %------------------------------- Copyright --------------------------------

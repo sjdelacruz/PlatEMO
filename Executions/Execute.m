@@ -1,23 +1,28 @@
 %Sebastián José de la Cruz Martínez
-%Main parameters
-
 clear all
 clc
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%General parameters%%%%%%%%%%%%%%%%%%%%
 R=20;
-M = 15;
-Max_Gen = 1500;
-N = 135;
-D = M+4;
-Problem = @C1_DTLZ1;
-Algorithm = @CMaOEAIGDv1;
-
-%Extras parameters
+M =5;
+Max_Gen = 1250;
+N = 210;
+D = M+9;
+Problem = @C3_DTLZ4;
 Max_NFE = N * Max_Gen;
-Save = 1;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Algorithms%%%%%%%%%%%%%%%%%%%%%%%%%%%%                    
+nsgaiii = @NSGAIII;
+vs1 = @CMaOEAIGDv1;
+vs2 = @CMaOEAIGDv2;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+execute(nsgaiii,Problem,R,Max_NFE,M,D,N);
+execute(vs1,Problem,R,Max_NFE,M,D,N);
+execute(vs2,Problem,R,Max_NFE,M,D,N);
 
-for i=1 : R 
-    platemo('algorithm',Algorithm,'problem',Problem,'N',N,'M',M,'D',D,'maxFE',Max_NFE,'save',Save,'run',i);
-    %platemo('algorithm',@NSGAIII,'problem',Problem,'N',N,'M',M,'D',D,'maxFE',Max_NFE,'save',Save);
+
+function execute(Algorithm, Problem, Runs, Max_NFE, Objectives, Dimensions, Individuals)
+    for i=1 : Runs
+        platemo('algorithm',Algorithm,'problem',Problem,'N',Individuals,'M',Objectives,'D',Dimensions,'maxFE',Max_NFE,'save',1,'run',i);
+    end
 end
-

@@ -1,4 +1,4 @@
-function [Population,Rank,Dis] = EnvironmentalSelection(Population,W,N)
+function [Population,Rank,Dis] = EnvironmentalSelectionv2(Population,W,N)
 % The environmental selection of MaOEA/IGD
 
 %------------------------------- Copyright --------------------------------
@@ -18,7 +18,7 @@ function [Population,Rank,Dis] = EnvironmentalSelection(Population,W,N)
     Dis  = zeros(length(Population),size(W,1));
     
     %Counter of reference point dominated by each solution
-    DomCount = zeros(1,length(Population));
+    DomCount = 0;
     
     %Constraint violation sum of each individual
     CVS = sum(max(0,Population.cons),2);
@@ -30,36 +30,44 @@ function [Population,Rank,Dis] = EnvironmentalSelection(Population,W,N)
         
         %Determine if the solution dominates a reference point or if it is 
         % worse than some reference points
-        domx = any(temp<W,2);
-        domi = domx - any(temp>W,2);
-        DomCount(i) = sum(domx);
-        
-        if CVS(i) <= 0 && any(domi==1)% the solution dominates reference points
+        domi = any(temp<W,2) - any(temp>W,2);
+      
+        %If the solution is feasible and dominates at least one reference
+        %point
+        if CVS(i) <= 0 && any(domi==1)
             Rank(i)  = 1;
             Dis(i,:) = -sqrt(sum((temp-W).^2,2))';
-        elseif CVS(i) <= 0 && any(domi==-1) %the solution is daminated by reference points
-            Rank(i)  = 3;
-            Dis(i,:) = sqrt(sum((temp-W).^2,2))';
-        elseif CVS(i) <= 0 && any(domi==0)% the solutions is non dominated with reference point
+        %if the solution is feasible and if its nondominated by a part of reference points  
+        elseif CVS(i) <= 0 && any(domi==0)
             Rank(i)  = 2;
             Dis(i,:) = sqrt(sum(max(temp-W,0).^2,2))';
-        elseif CVS(i) >= 0 && any(domi==1) && DomCount(i) == length(W)
+            
+            DomCount_ = sum(domi);
+            if DomCount_ > DomCount
+                DomCount = DomCount_;
+            end
+        %if the solution is non feasible but dominates all reference points    
+        elseif all(domi==1) 
+            Rank(i)  = 3;
+            Dis(i,:) = -sqrt(sum((temp-W).^2,2))';
+        %if the solution ins non feasible but dominates at least one
+        %reference point
+        elseif any(domi==1)
             Rank(i)  = 4;
             Dis(i,:) = -sqrt(sum((temp-W).^2,2))';
-        elseif CVS(i) >= 0 && any(domi==1)
-            Rank(i)  = 5;
-            Dis(i,:) = -sqrt(sum((temp-W).^2,2))';
-        elseif CVS(i) >= 0 && any(domi==-1)
+        %if the solutions are dominad by a part of reference points   
+        elseif any(domi==-1)
             Rank(i)  = 6;
             Dis(i,:) = sqrt(sum((temp-W).^2,2))';
+        %if the solutions  is nondominated by reference points any(domi==0)
         else
-            Rank(i)  = 7;
+            Rank(i)  = 5;
             Dis(i,:) = sqrt(sum(max(temp-W,0).^2,2))';
-        end 
+        end
     end
 
     %% Select the solutions in the first fronts
-    MaxFNo = find(cumsum(hist(Rank,1:7))>=N,1);
+    MaxFNo = find(cumsum(hist(Rank,1:6))>=N,1);
     Next   = Rank < MaxFNo;
     
     %% Select the solutions in the last front
