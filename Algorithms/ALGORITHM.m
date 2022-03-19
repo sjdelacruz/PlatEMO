@@ -162,9 +162,31 @@ classdef ALGORITHM < handle & matlab.mixin.Heterogeneous
                         top.Children(2).Callback{1}(top.Children(2),[],Algorithm);
                     end
                 elseif Algorithm.save > 0
-                    folder = fullfile('Data',class(Algorithm));
+                    n = length(Algorithm.parameter);
+                    if n >0
+                        if isnumeric(Algorithm.parameter{1})
+                            folder = fullfile('Data',class(Algorithm),num2str(Algorithm.parameter{1}));
+                        else
+                            folder = fullfile('Data',class(Algorithm));
+                        end
+                    else
+                        folder = fullfile('Data',class(Algorithm));
+                    end
                     [~,~]  = mkdir(folder);
                     file   = fullfile(folder,sprintf('%s_%s_M%d_D%d_',class(Algorithm),class(Problem),Problem.M,Problem.D));
+                    
+                    if n >0 && isstruct(Algorithm.parameter{1})
+                        Parameters= Algorithm.parameter{1};
+                        nParameters = length(Parameters);
+                        
+                        cad='_';
+                        for par=1:nParameters
+                            cad = strcat(cad, Parameters(par).Name, '_', num2str(Parameters(par).Value),'_');
+                        end
+                        file = strcat(file,cad);
+                    end
+                    
+                    
                     runNo  = 1;
                     while exist([file,num2str(runNo),'.mat'],'file') == 2
                         runNo = runNo + 1;
