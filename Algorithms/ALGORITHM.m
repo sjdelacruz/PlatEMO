@@ -175,6 +175,7 @@ classdef ALGORITHM < handle & matlab.mixin.Heterogeneous
                     [~,~]  = mkdir(folder);
                     file   = fullfile(folder,sprintf('%s_%s_M%d_D%d_',class(Algorithm),class(Problem),Problem.M,Problem.D));
                     
+                    %Modified Sebastián José de la Cruz Martínez
                     if n >0 && isstruct(Algorithm.parameter{1})
                         Parameters= Algorithm.parameter{1};
                         nParameters = length(Parameters);
