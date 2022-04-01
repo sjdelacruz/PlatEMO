@@ -51,6 +51,6 @@ for r=1: runs
     if reproducibility
         rng(r);
     end
-        platemo('algorithm',{fun_handle,extra_parameters},'problem',{problem,m,d,n,maxEvals},'N',n,'maxFE',maxEvals,'run',r,'save',save);
+        platemo('algorithm',{fun_handle,extra_parameters},'problem',problem, 'M', m, 'D', d,'N',n,'maxFE',maxEvals,'run',r,'save',save);
 end
 end

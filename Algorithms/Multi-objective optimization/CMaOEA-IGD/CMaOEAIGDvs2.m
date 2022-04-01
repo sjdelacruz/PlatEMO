@@ -1,5 +1,6 @@
 classdef CMaOEAIGDvs2 < ALGORITHM
 % <many> <real/binary/permutation>
+% Joines and Houck dynamic penalty
 % IGD based many-objective evolutionary algorithm
 % DNPE --- --- Number of evaluations for nadir point estimation
 

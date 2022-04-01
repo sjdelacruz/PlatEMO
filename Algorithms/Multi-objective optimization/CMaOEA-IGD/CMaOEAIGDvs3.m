@@ -1,5 +1,6 @@
 classdef CMaOEAIGDvs3 < ALGORITHM
 % <many> <real/binary/permutation>
+% Adaptive penalty function
 % IGD based many-objective evolutionary algorithm
 % DNPE --- --- Number of evaluations for nadir point estimation
 
@@ -19,7 +20,8 @@ classdef CMaOEAIGDvs3 < ALGORITHM
     methods
         function main(Algorithm,Problem)
             %% Parameter setting
-            DNPE = Algorithm.ParameterSet(100*Problem.N);
+            DNPE = 100*Problem.N;
+            k = Algorithm.ParameterSet();
             
             %% Nadir point estimation
             [W,Problem.N] = UniformPoint(Problem.N,Problem.M);

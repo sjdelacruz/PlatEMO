@@ -1,7 +1,7 @@
-function table = GenerateInformation(experiments,algorithms,results,QIs)
+function [table,Conv] = GenerateInformation(experiments,algorithms,results,QIs)
 global whatAnalyze
 nExperiments=length(results);
-
+Conv=cell(1,nExperiments);
 %For each experiment extract information in rows structures
 for i=1: nExperiments
     Current = results{i};
@@ -11,7 +11,8 @@ for i=1: nExperiments
         table(i) = row;
     end
     name = strcat('Convergence_', func2str(experiments(i).mop),'_',func2str(QIs{whatAnalyze}));
-    GeneralConvergence(convI(1,:),convI(2,:), name);
+    Conv{i} = convI;
+    %GeneralConvergence(convI(1,:),convI(2,:), name);
     
 end
 end
@@ -51,7 +52,16 @@ for row = 1 : nRows
     
     stadistics = RowsExperiment(row).stadistics;
     [~,calculateds] = size(stadistics);
-    problem = experiment.mop(experiment.m, experiment.d,algorithm.n,experiment.maxEvals);
+    
+    if experiment.m==3 && contains(func2str(experiment.mop), 'MW')
+        algorithm(row).n=300;
+    end
+    
+    if contains(func2str(experiment.mop), convertCharsToStrings('LIRCMOP'))
+        algorithm(row).n=300;
+    end
+
+    problem = experiment.mop(experiment.m, experiment.d,algorithm(row).n,experiment.maxEvals);
     
     %Check the results of the row to classify them
     for r=1 : calculateds
@@ -71,14 +81,14 @@ for row = 1 : nRows
         cad=strcat(RowsExperiment(row).name,'_', rowResult.algorithm, '_',  data{indicator}.name);
         
         if save_figures
-            GenerateFront(stadistics(r).cpf,cad);
+            %GenerateFront(stadistics(r).cpf,cad);
             %if the indicator that i want to analyze is equal to the
             %current
             if whatAnalyze == indicator
                 convergence{row} = GenerateConvergence(stadistics(r).history,QIs{indicator},cad,problem);
                 algorithmsName{row} = rowResult.algorithm;
             else
-                GenerateConvergence(stadistics(r).history,QIs{indicator},cad,problem);
+                %GenerateConvergence(stadistics(r).history,QIs{indicator},cad,problem);
             end
         end
     end
@@ -103,7 +113,7 @@ elseif dimensions == 3
 end
 
 title(name,'Interpreter','latex');
-saveas(f,strcat(path_figures,'\',name,'.png'));
+saveas(f,strcat(path_figures,'/',name,'.png'));
 end
 
 function convergence = GenerateConvergence(history,QI,name,problem)
@@ -117,10 +127,10 @@ for i=1: n
     generations(i,1) = history{i,1};
     values(i,1) = QI(history{i,2},problem.optimum);
 end
-f = figure('visible','off');
-plot(generations,values);
-title(name,'Interpreter','latex');
-saveas(f,strcat(path_figures,'\','Conv_',name,'.png'));
+%f = figure('visible','off');
+%plot(generations,values);
+%title(name,'Interpreter','latex');
+%saveas(f,strcat(path_figures,'/','Conv_',name,'.png'));
 
 convergence=[generations,values];
 end
@@ -141,5 +151,5 @@ legend(etiquetas);
 xlabel('Generations') 
 ylabel('Indicator values') 
 hold off
-saveas(f,strcat(path_figures,'\General',name,'.png'));
+saveas(f,strcat(path_figures,'/General',name,'.png'));
 end

@@ -1,5 +1,6 @@
-classdef CMaOEAIGDvs1 < ALGORITHM
+classdef CMaOEAIGDvs1 < ALGORITHM  
 % <many> <real/binary/permutation>
+% Annealing penalty function
 % IGD based many-objective evolutionary algorithm
 % DNPE --- --- Number of evaluations for nadir point estimation
 
@@ -78,5 +79,4 @@ function fit = Fitness(PopObj,PopCon,Penalty)
         snd = sum(PopObj(:,[1:i-1,i+1:end]).^2,2);
         fit(:,i) = fst + (100*snd) + cvsPenalty;
     end
-   
 end

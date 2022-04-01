@@ -48,6 +48,13 @@ for j=1 : nExperiments
             end
         end
     end
-    GeneralTable(j,:) =data;
+    nData= length(data);
+    for i = 1 : nData
+        if isempty(data{1,i})
+            data{1,i}=-1;
+        end
+    end
+        GeneralTable(j,:) =data;
+
 end
 end
