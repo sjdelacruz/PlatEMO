@@ -24,7 +24,7 @@ whatAnalyze=1;
 QIs = {@HV, @IGD, @Spacing};
 
 %False == analize results
-whatDo=[true,false];
+whatDo=[false,true];
 
 %Configurations of experimentation and algorithms
 
@@ -35,33 +35,34 @@ whatDo=[true,false];
 
 %Example Experiment(i) =
 %generateExperiment(Runs,Problem,M,D,MaxEvals,Save)
-% Experiments(1) = GenerateExperiment(50,@MW1,2,15,60000,1000);
-% Experiments(2) = GenerateExperiment(50,@MW2,2,15,60000,1000);
-% Experiments(3) = GenerateExperiment(50,@MW3,2,15,60000,1000);
-% Experiments(4) = GenerateExperiment(50,@MW4,3,15,60000,1000);
-% Experiments(5) = GenerateExperiment(50,@MW5,2,15,60000,1000);
-% Experiments(6) = GenerateExperiment(50,@MW6,2,15,60000,1000);
-% Experiments(7) = GenerateExperiment(50,@MW7,2,15,60000,1000);
-% Experiments(8) = GenerateExperiment(50,@MW8,3,15,60000,1000);
-% Experiments(9) = GenerateExperiment(50,@MW9,2,15,60000,1000);
-% Experiments(10) = GenerateExperiment(50,@MW10,2,15,60000,1000);
-% Experiments(11) = GenerateExperiment(50,@MW11,2,15,60000,1000);
-% Experiments(12) = GenerateExperiment(50,@MW12,2,15,60000,1000);
-% Experiments(13) = GenerateExperiment(50,@MW13,2,15,60000,1000);
-% Experiments(14) = GenerateExperiment(50,@MW14,3,15,60000,1000);
+Exe=20;
+Experiments(1) = GenerateExperiment(Exe,@C1_DTLZ1,3,7,75000,1000);
+Experiments(2) = GenerateExperiment(Exe,@C1_DTLZ3,3,12,75000,1000);
+Experiments(3) = GenerateExperiment(Exe,@C2_DTLZ2,3,12,75000,1000);
+Experiments(4) = GenerateExperiment(Exe,@C3_DTLZ4,3,12,75000,1000);
+Experiments(5) = GenerateExperiment(Exe,@MW1,2,15,60000,1000);
+Experiments(6) = GenerateExperiment(Exe,@MW2,2,15,60000,1000);
+Experiments(7) = GenerateExperiment(Exe,@MW3,2,15,60000,1000);
+Experiments(8) = GenerateExperiment(Exe,@MW4,3,15,60000,1000);
+Experiments(9) = GenerateExperiment(Exe,@MW5,2,15,60000,1000);
+Experiments(10) = GenerateExperiment(Exe,@MW6,2,15,60000,1000);
+Experiments(11) = GenerateExperiment(Exe,@MW7,2,15,60000,1000);
+Experiments(12) = GenerateExperiment(Exe,@MW8,3,15,60000,1000);
+Experiments(13) = GenerateExperiment(Exe,@MW9,2,15,60000,1000);
+Experiments(14) = GenerateExperiment(Exe,@MW10,2,15,60000,1000);
+Experiments(15) = GenerateExperiment(Exe,@MW11,2,15,60000,1000);
+Experiments(16) = GenerateExperiment(Exe,@MW12,2,15,60000,1000);
+Experiments(17) = GenerateExperiment(Exe,@MW13,2,15,60000,1000);
+Experiments(18) = GenerateExperiment(Exe,@MW14,3,15,60000,1000);
 
+% Experiments(1) = GenerateExperiment(15,@MW4,5,15,100000,1000);
+% Experiments(2) = GenerateExperiment(15,@MW8,5,15,100000,1000);
+% Experiments(3) = GenerateExperiment(15,@MW14,5,15,100000,1000);
+% Experiments(4) = GenerateExperiment(15,@MW4,10,15,200000,1000);
+% Experiments(5) = GenerateExperiment(15,@MW8,10,15,200000,1000);
+% Experiments(6) = GenerateExperiment(15,@MW14,10,15,200000,1000);
 
-
-
-
-Experiments(1) = GenerateExperiment(15,@MW4,5,15,100000,1000);
-Experiments(2) = GenerateExperiment(15,@MW8,5,15,100000,1000);
-Experiments(3) = GenerateExperiment(15,@MW14,5,15,100000,1000);
-Experiments(4) = GenerateExperiment(15,@MW4,10,15,200000,1000);
-Experiments(5) = GenerateExperiment(15,@MW8,10,15,200000,1000);
-Experiments(6) = GenerateExperiment(15,@MW14,10,15,200000,1000);
-
-% Experiments(15) = GenerateExperiment(30,@LIRCMOP1,2,30,300000,1000);
+% Experiments(1) = GenerateExperiment(30,@LIRCMOP1,2,30,300000,1000);
 % Experiments(16) = GenerateExperiment(30,@LIRCMOP2,2,30,300000,1000);
 % Experiments(17) = GenerateExperiment(30,@LIRCMOP3,2,30,300000,1000);
 % Experiments(18) = GenerateExperiment(30,@LIRCMOP4,2,30,300000,1000);
@@ -87,10 +88,13 @@ Experiments(6) = GenerateExperiment(15,@MW14,10,15,200000,1000);
 %Example: Algorithms(1) = GenerateAlgorithm(@CMaOEAIGDvs2, 'MaOEAIGD con 
 %Penalidad Dinámica Joines and Houck',100,struct('Name',{'C','Beta','Alfa'}, 
 %'Value',{0.5,2,2}));
-%Algorithms(1) = GenerateAlgorithm(@CMaOEAIGDvs1, 'MaOEAIGD_Penalidad_Recocido',300,{});
-%Algorithms(2) = GenerateAlgorithm(@CMaOEAIGDvs2, 'MaOEAIGD_Penalidad_Dinámica_Joines and Houck',300,...
-%    struct('Name',{'C','Beta','Alfa'}, 'Value',{0.5,2,2}));
-Algorithms(1) = GenerateAlgorithm(@CMaOEAIGDvs3, 'MaOEAIGD_Adaptive_penalty',100,struct('Name',{'k','B1','B2'}, 'Value',{20,2,2}));
+Algorithms(1) = GenerateAlgorithm(@CMaOEAIGDvs1, 'MaOEAIGD_Penalidad_Recocido',100,{});
+Algorithms(2) = GenerateAlgorithm(@CMaOEAIGDvs2, 'MaOEAIGD_Penalidad_Dinámica_Joines and Houck',100,...
+    struct('Name',{'C','Beta','Alfa'}, 'Value',{0.5,2,2}));
+N=100;
+NDPE= 100*N;
+k=(NDPE/5)/100;
+Algorithms(3) = GenerateAlgorithm(@CMaOEAIGDvs3, 'MaOEAIGD_Adaptive_penalty',N,{});
 %Algorithms(4) = GenerateAlgorithm(@TiGE2, 'Three indicators',300,{});
 %Algorithms(5) = GenerateAlgorithm(@CCMO, 'Coevolutionary framework',300,{});
 %Algorithms(6) = GenerateAlgorithm(@MOEADDAE, 'MOEAD with detect-and-escape strategy',300,{});
