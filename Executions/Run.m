@@ -21,10 +21,10 @@ save_figures = true;
 whatAnalyze=1;
 
 %Indicators to evaluate results
-QIs = {@HV, @IGD, @Spacing};
+QIs = {@HV,@IGD};
 
 %False == analize results
-whatDo=[false,true];
+whatDo=[true,true];
 
 %Configurations of experimentation and algorithms
 
@@ -88,13 +88,13 @@ Experiments(18) = GenerateExperiment(Exe,@MW14,3,15,60000,1000);
 %Example: Algorithms(1) = GenerateAlgorithm(@CMaOEAIGDvs2, 'MaOEAIGD con 
 %Penalidad Dinámica Joines and Houck',100,struct('Name',{'C','Beta','Alfa'}, 
 %'Value',{0.5,2,2}));
-Algorithms(1) = GenerateAlgorithm(@CMaOEAIGDvs1, 'MaOEAIGD_Penalidad_Recocido',100,{});
-Algorithms(2) = GenerateAlgorithm(@CMaOEAIGDvs2, 'MaOEAIGD_Penalidad_Dinámica_Joines and Houck',100,...
+%Algorithms(1) = GenerateAlgorithm(@CMaOEAIGDvs1, 'MaOEAIGD_Penalidad_Recocido',100,{});
+Algorithms(1) = GenerateAlgorithm(@CMaOEAIGDvs2, 'MaOEAIGD_Penalidad_Dinámica_Joines and Houck',100,...
     struct('Name',{'C','Beta','Alfa'}, 'Value',{0.5,2,2}));
 N=100;
 NDPE= 100*N;
 k=(NDPE/5)/100;
-Algorithms(3) = GenerateAlgorithm(@CMaOEAIGDvs3, 'MaOEAIGD_Adaptive_penalty',N,{});
+Algorithms(2) = GenerateAlgorithm(@CMaOEAIGDvs3, 'MaOEAIGD_Adaptive_penalty',N,{});
 %Algorithms(4) = GenerateAlgorithm(@TiGE2, 'Three indicators',300,{});
 %Algorithms(5) = GenerateAlgorithm(@CCMO, 'Coevolutionary framework',300,{});
 %Algorithms(6) = GenerateAlgorithm(@MOEADDAE, 'MOEAD with detect-and-escape strategy',300,{});
@@ -113,13 +113,19 @@ end
 %Verify if is necessary to generate information obtained of algorithm(s) in
 %experiment(s)
 if whatDo(2) == true
-    
     Results = GenerateResults(Experiments,Algorithms,QIs);
     ListTables = GenerateInformation(Experiments,Algorithms,Results,QIs);
     %GeneralTables = ConstructGeneralTable(Experiments,QIs,ListTables);
     Especialized = ConstructEspecializedTable(Experiments,Algorithms,QIs,ListTables,whatAnalyze);
     
-    %Join all results;
-    
+    %Join all results
     [statisticalResults,means,stats,tbl] =StatisticalComparison(Especialized,func2str(QIs{whatAnalyze}));
 end
+
+% recocido = readExecutions(Experiments,Algorithms(1),QIs{1});
+ dinamico = readExecutions(Experiments,Algorithms(1),QIs{1});
+ adaptativo = readExecutions(Experiments,Algorithms(2),QIs{1});
+% 
+% A = WilcoxonGroups(recocido, dinamico);
+ B= WilcoxonGroups(dinamico, adaptativo);
+% C= WilcoxonGroups(recocido, adaptativo);

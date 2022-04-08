@@ -48,10 +48,23 @@ classdef CMaOEAIGDvs3 < ALGORITHM
             [Population,Rank,Dis] = EnvironmentalSelection(Population,W,Problem.N);
 
             %% Optimization
+            g=1;
             while Algorithm.NotTerminated(Population)
                 MatingPool = TournamentSelection(2,Problem.N,sum(max(0,Population.cons),2),Rank,min(Dis,[],2));
                 Offspring  = OperatorGAhalf(Population(MatingPool));
                 [Population,Rank,Dis] = EnvironmentalSelection([Population,Offspring],W,Problem.N);
+                
+                if mod(g,50) == 0
+                    [~,ext] = min(Fitness(Population.objs,Population.cons),[],1);
+                    zmax    = diag(Population(ext).objs)';
+                    zmin    = min(Population.objs,[],1);
+                    zmax(zmax<1e-6) = 1;
+                    
+                    % Transform the points into the Utopian Pareto front
+                    W = W.*repmat(zmax-zmin,Problem.N,1) + repmat(zmin,Problem.N,1);
+                end
+                g=g+1;
+
             end
         end
     end
