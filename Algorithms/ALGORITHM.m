@@ -36,6 +36,12 @@ classdef ALGORITHM < handle & matlab.mixin.Heterogeneous
         result;                         % populations saved in current execution
         metric;                         % metric values of current populations
     end
+    
+    properties
+        FeasibleR = [];
+        RandomWalk = [];
+        SearchProcess = [];
+    end
     methods(Access = protected)
         function obj = ALGORITHM(varargin)
         %ALGORITHM - The constructor of ALGORITHM.
@@ -180,9 +186,9 @@ classdef ALGORITHM < handle & matlab.mixin.Heterogeneous
                         Parameters= Algorithm.parameter{1};
                         nParameters = length(Parameters);
                         
-                        cad='_';
+                        cad='';
                         for par=1:nParameters
-                            cad = strcat(cad, Parameters(par).Name, '_', num2str(Parameters(par).Value),'_');
+                            cad = strcat(cad, Parameters(par).name, '_', num2str(Parameters(par).value),'_');
                         end
                         file = strcat(file,cad);
                     end
@@ -194,7 +200,10 @@ classdef ALGORITHM < handle & matlab.mixin.Heterogeneous
                     end
                     result = Algorithm.result;
                     metric = Algorithm.metric;
-                    save([file,num2str(runNo),'.mat'],'result','metric');
+                    f = Algorithm.FeasibleR;
+                    r = Algorithm.RandomWalk;
+                    SearchProcess = Algorithm.SearchProcess;
+                    save([file,num2str(runNo),'.mat'],'result','metric','f','r','SearchProcess');
                 end
             end
         end
